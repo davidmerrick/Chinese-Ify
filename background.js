@@ -5,21 +5,35 @@ var requestFilter = {
 extraInfoSpec = ['requestHeaders', 'blocking'],
 handler = function(details) {
 
-var isRefererSet = false;
+var isAcceptLanguageSet = false;
+var isContentLanguageSet = false;
+
 var headers = details.requestHeaders,
     blockingResponse = {};
 
 for (var i = 0, l = headers.length; i < l; ++i) {
     if (headers[i].name == 'Accept-Language') {
         headers[i].value = "zh";
-        isRefererSet = true;
-        break;
+        isAcceptLanguageSet = true;
+    }
+    if (headers[i].name == 'Content-Language') {
+        headers[i].value = "zh";
+        isContentLanguageSet = true;
+    }
+    if(isContentLanguageSet && isAcceptLanguageSet){
+     	break;
     }
 }
 
-if (!isRefererSet) {
+if (!isAcceptLanguageSet) {
     headers.push({
         name: "Accept-Language",
+        value: "zh"
+    });
+}
+if (!isContentLanguageSet) {
+    headers.push({
+        name: "Content-Language",
         value: "zh"
     });
 }
